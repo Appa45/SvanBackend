@@ -8,6 +8,11 @@ const router = express.Router();
 
 router.post(
   "/register",
+   (req, res, next) => {
+    console.log("REGISTER ROUTE HIT");
+    console.log("BODY:", req.body);
+    next();
+  },
   [
     body("name").trim().notEmpty().withMessage("Name is required"),
     body("email").isEmail().withMessage("A valid email is required").normalizeEmail(),

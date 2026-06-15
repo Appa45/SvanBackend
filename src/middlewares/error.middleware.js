@@ -5,11 +5,12 @@ const notFoundHandler = (req, res, next) => {
 };
 
 const errorHandler = (error, req, res, next) => {
-  const statusCode = error.statusCode || 500;
+  console.error("FULL ERROR:", error);
 
-  res.status(statusCode).json({
+  res.status(error.statusCode || 500).json({
     success: false,
-    message: error.message || "Internal server error"
+    message: error.message,
+    stack: error.stack,
   });
 };
 

@@ -7,43 +7,57 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 80
+      maxlength: 80,
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
-      select: false
+      select: false,
     },
     role: {
       type: String,
       enum: ["admin", "customer"],
-      default: "customer"
-    }
+      default: "customer",
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-userSchema.pre("save", async function hashPassword(next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
 
-  this.password = await bcrypt.hash(this.password, 12);
-  return next();
+  try {
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-userSchema.methods.comparePassword = function comparePassword(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function (
+  candidatePassword
+) {
+  return bcrypt.compare(
+    candidatePassword,
+    this.password
+  );
 };
 
-const User = mongoose.model("User", userSchema);
+// Prevent model overwrite issues
+const User =
+  mongoose.models.User ||
+  mongoose.model("User", userSchema);
 
 module.exports = User;

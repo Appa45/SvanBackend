@@ -7,6 +7,8 @@ const connectDatabase = async () => {
 
     console.log("Connecting to MongoDB...");
 
+    console.log("Mongo URI:", env.mongoUri);
+
     const connection = await mongoose.connect(env.mongoUri);
 
     console.log(
