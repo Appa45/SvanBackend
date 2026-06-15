@@ -9,15 +9,7 @@ const { notFoundHandler, errorHandler } = require("./middlewares/error.middlewar
 const app = express();
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://svan-backend.vercel.app",
-    ],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
