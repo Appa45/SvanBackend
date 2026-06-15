@@ -24,6 +24,14 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+app.get("/api/debug", (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    mongoUriStart: process.env.MONGO_URI?.slice(0, 25),
+    nodeEnv: process.env.NODE_ENV,
+  });
+});
+
 app.use("/api/auth", authRoutes);
 
 app.use(notFoundHandler);
